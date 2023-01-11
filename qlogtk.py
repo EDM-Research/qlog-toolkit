@@ -4,7 +4,7 @@ import json
 sent_packets = {}
 received_packets = {}
 
-with open('test.qlog', 'r') as file:
+with open('test_s.qlog', 'r') as file:
     header = file.readline()
     for entry in file:
         data = json.loads(entry)
@@ -45,11 +45,13 @@ with open('test.qlog', 'r') as file:
                     for ack_range in frame['acked_ranges']:
                         print(ack_range)
                         if len(ack_range) == 1:
-                            sent_packets[ack_range[0]]['ack'] = data['time']
+                            if not 'ack' in sent_packets[ack_range[0]]:
+                                sent_packets[ack_range[0]]['ack'] = data['time']
                         else:
                             for packet_number in range(ack_range[0], ack_range[1]+1):
                                 print(ack_range[0], packet_number, ack_range[1])
-                                sent_packets[packet_number]['ack'] = data['time']
+                                if not 'ack' in sent_packets[packet_number]:
+                                    sent_packets[packet_number]['ack'] = data['time']
                     #TODO use ack_delay?
 
 
@@ -79,7 +81,8 @@ for g in [[sent_packets, sent_x_axis, sent_y_axis, sent_y_avg],[received_packets
             pass
             print(packet_number)
         
-        x_axis.append(packet_number)
+        #x_axis.append(packet_number)
+        x_axis.append(data['sent'])
         y_axis.append(instantaneous_throughput)
 
         if c_avg == None:
@@ -93,13 +96,15 @@ plt.suptitle('packet throughput')
 plt.subplot(121)
 plt.title("sent")
 plt.plot(sent_x_axis, sent_y_axis, 'bs', markersize=1.5)
-plt.plot(sent_x_axis, sent_y_avg, 'r')
+#plt.plot(sent_x_axis, sent_y_avg, 'r')
 plt.ylabel('instantaneous throughput (Kbps)')
-plt.xlabel('packetnumber')
+plt.xlabel('time (ms)')
+#plt.xlabel('packetnumber')
 plt.subplot(122)
 plt.title("received")
 plt.plot(received_x_axis, received_y_axis, 'bs', markersize=1.5)
-plt.plot(received_x_axis, received_y_avg, 'r')
+#plt.plot(received_x_axis, received_y_avg, 'r')
 plt.ylabel('instantaneous throughput (Kbps)')
-plt.xlabel('packetnumber')
+#plt.xlabel('packetnumber')
+plt.xlabel('time (ms)')
 plt.show()
