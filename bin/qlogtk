@@ -1,0 +1,15 @@
+#!/bin/python3
+
+import argparse
+
+
+def main():
+    argument_parser = argparse.ArgumentParser(
+        prog="qlog-toolkit", description="qlog toolkit")
+
+    arguments = argument_parser.parse_args()
+    print(arguments)
+
+
+if __name__ == "__main__":
+    main()
