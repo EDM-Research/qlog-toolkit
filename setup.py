@@ -9,4 +9,5 @@ setup(name='qlog_toolkit',
       license='MIT',
       packages=['qlogtk'],
       scripts=["bin/qlogtk"],
+      requires=['matplotlib']
       )
