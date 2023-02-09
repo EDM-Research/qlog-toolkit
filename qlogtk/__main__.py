@@ -1,17 +1,23 @@
 #!/bin/python3
-from qlogtk.input import read_events
+from qlogtk.input import read_events, format_event
 from qlogtk.output import OutputType, prepare_output, output_data
-from qlogtk.action import *
+from qlogtk.action import instantaneous_throughput, test
 import argparse
 
 action_to_callback_map = {
-    "calculate_instantaneous_throughput": calculate_instantaneous_throughput,
-    "test": test,
+    "calculate_instantaneous_throughput": {
+        'process': instantaneous_throughput.calculate,
+        'output': instantaneous_throughput.output,
+    },
+    "test": {
+        'process': test.calculate,
+        'output': test.output,
+    }
 }
 
 
 def execute_actions(actions, inputs, output):
-    outputs = prepare_output(output, len(inputs), len(actions))
+    outputs = prepare_output(output, inputs, actions)
 
     for a_i in range(len(actions)):
         action = action_to_callback_map.get(actions[a_i])
@@ -22,7 +28,10 @@ def execute_actions(actions, inputs, output):
             # execute action on inputs
             for i_i in range(len(inputs)):
                 for event in read_events(inputs[i_i]):
-                    outputs[a_i][i_i] = action(event, outputs[a_i][i_i])
+                    event = format_event(event)
+                    outputs[a_i][i_i] = action['process'](event, outputs[a_i][i_i])
+
+                outputs[a_i][i_i] = action['output'](output, outputs[a_i][i_i])
 
     output_data(output, outputs)
 

@@ -8,6 +8,5 @@ setup(name='qlog_toolkit',
       author_email='mike.vandersanden@uhasselt.be',
       license='MIT',
       packages=['qlogtk'],
-      scripts=["bin/qlogtk"],
       requires=['matplotlib']
       )
