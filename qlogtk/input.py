@@ -6,7 +6,6 @@ def read_events(input):
     with open(input, 'r') as file:
         qlog_format = None
         qlog = None
-        print(file)
         try:
             qlog = json.load(file)
             qlog_format = qlog['qlog_format']

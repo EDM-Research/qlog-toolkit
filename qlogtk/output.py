@@ -35,6 +35,8 @@ def prepare_output_matplotlib(inputs, actions):
             axes = [ax]*len(inputs)
         else:
             fig, axes = plt.subplots(1, len(inputs), sharex=True, sharey=True)
+            if len(inputs) < 2:
+                axes = [axes]
         fig.suptitle(action)
         for i_i in range(len(inputs)):
             input = inputs[i_i]

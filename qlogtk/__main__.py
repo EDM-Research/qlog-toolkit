@@ -1,13 +1,17 @@
 #!/bin/python3
 from qlogtk.input import read_events, format_event
 from qlogtk.output import OutputType, prepare_output, output_data
-from qlogtk.action import instantaneous_throughput, test
+from qlogtk.action import instantaneous_throughput, test, bitrate_ladder
 import argparse
 
 action_to_callback_map = {
     "calculate_instantaneous_throughput": {
         'process': instantaneous_throughput.calculate,
         'output': instantaneous_throughput.output,
+    },
+    "bitrate_ladder": {
+        'process': bitrate_ladder.calculate,
+        'output': bitrate_ladder.output,
     },
     "test": {
         'process': test.calculate,
